@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SiteProfile {
+  id            String   @id @default(cuid())
+  fullName      String
+  logoText      String
+  tagline       String
+  heroTitle1    String
+  heroTitle2    String
+  heroPhotoPath String?
+  aboutText     String
+  birthDate     String
+  address       String
+  zipCode       String?
+  email         String
+  phone         String
+  linkedinUrl   String
+  baseLocation  String
+  cvPath        String?
+  updatedAt     DateTime @updatedAt
+}
+
+model PortfolioItem {
+  id               String   @id @default(cuid())
+  title            String
+  category         String?
+  type             String
+  thumbnailPath    String?
+  imagePath        String?
+  excelPath        String?
+  excelPreviewJson String?
+  pdfPath          String?
+  description      String?
+  status           String   @default("draft")
+  sortOrder        Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model BlogPost {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  excerpt       String?
+  thumbnailPath String?
+  htmlFilePath  String?
+  renderedHtml  String?
+  status        String   @default("draft")
+  publishDate   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Comment {
+  id             String   @id @default(cuid())
+  linkedinId     String
+  linkedinName   String
+  linkedinEmail  String?
+  linkedinAvatar String?
+  linkedinTitle  String?
+  linkedinUrl    String?
+  message        String
+  status         String   @default("pending")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
