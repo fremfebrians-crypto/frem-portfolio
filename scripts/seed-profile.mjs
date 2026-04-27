@@ -3,40 +3,51 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  const profileData = {
+    fullName: 'Frem Pebrianta Tarigan',
+    logoText: 'Frem Portfolio',
+    tagline: 'GENERAL ACCOUNTING',
+    heroTitle1: 'Frem Pebrianta',
+    heroTitle2: 'Tarigan',
+    heroPhotoPath: '/images/hero/frem-hero.png',
+    aboutText:
+      'I am a General Accounting professional with experience in finance, administration, and reporting.',
+    birthDate: '2003-02-08',
+    address: 'Jimbaran, Kec. Kuta Selatan, Kab. Badung, Bali',
+    zipCode: '80361',
+    email: 'fremfebrians@gmail.com',
+    phone: '+6285857538258',
+    linkedinUrl: 'https://www.linkedin.com/in/frem-pebrianta-tarigan-037940278',
+    baseLocation: 'Bali',
+    cvPath: null,
+  };
+
   const existingProfile = await prisma.siteProfile.findFirst();
 
   if (existingProfile) {
-    console.log('SiteProfile already exists. Skipping seed.');
+    await prisma.siteProfile.update({
+      where: {
+        id: existingProfile.id,
+      },
+      data: profileData,
+    });
+
+    console.log('SiteProfile updated successfully.');
+    console.log('Hero photo path:', profileData.heroPhotoPath);
     return;
   }
 
   await prisma.siteProfile.create({
-    data: {
-      fullName: 'Frem Pebrianta Tarigan',
-      logoText: 'Frem Portfolio',
-      tagline: 'Full Stack Developer',
-      heroTitle1: 'Hi, I am Frem Pebrianta Tarigan',
-      heroTitle2: 'I build modern web applications.',
-      heroPhotoPath: null,
-      aboutText:
-        'I am a developer focused on building clean, functional, and user-friendly web applications.',
-      birthDate: '2003-02-08',
-      address: 'Jimbaran, Kec. Kuta Selatan, Kab. Badung, Bali',
-      zipCode: 80361,
-      email: 'fremfebrians@gmail.com',
-      phone: '+6285857538258',
-      linkedinUrl: 'linkedin.com/in/frem-pebrianta-tarigan-037940278',
-      baseLocation: 'Bali',
-      cvPath: null,
-    },
+    data: profileData,
   });
 
-  console.log('SiteProfile seeded successfully.');
+  console.log('SiteProfile created successfully.');
+  console.log('Hero photo path:', profileData.heroPhotoPath);
 }
 
 main()
   .catch((error) => {
-    console.error(error);
+    console.error('Seed failed:', error);
     process.exit(1);
   })
   .finally(async () => {
