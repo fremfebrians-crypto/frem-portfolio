@@ -34,8 +34,10 @@ export default function Hero({ profile }: { profile: SiteProfile | null }) {
   }, []);
 
   const heroPhoto = profile?.heroPhotoPath
-    ? `/api/profile?asset=${encodeURIComponent(profile.heroPhotoPath)}`
-    : '/images/hero/hero-photo.png';
+  ? profile.heroPhotoPath.startsWith('/images/')
+    ? profile.heroPhotoPath
+    : `/api/profile?asset=${encodeURIComponent(profile.heroPhotoPath)}`
+  : '/images/hero/frem-hero.png';
 
   return (
     <section id="home" className="hero-section">
